@@ -1,24 +1,27 @@
 package pl.senti.twitterrestapi.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 public class Post {
     @Id
+    @GeneratedValue(strategy =GenerationType.IDENTITY)
     private long id;
     private String title;
     private String content;
     private LocalDateTime created;
 
-    @OneToMany
-    @JoinColumn(name = "postId")
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "postId",updatable = false,insertable = false)
     private List<Comment> comment;
 
+    public Post() {
+
+    }
     public List<Comment> getComment() {
         return comment;
     }
@@ -27,9 +30,7 @@ public class Post {
         this.comment = comment;
     }
 
-    public Post() {
 
-    }
 
     public long getId() {
         return id;
