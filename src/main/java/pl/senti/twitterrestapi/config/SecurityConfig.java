@@ -37,12 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .withDefaultSchema()
-                .dataSource(dataSource)
-                .withUser("test")
-                .password("{bcrypt}"+ new BCryptPasswordEncoder().encode("test"))
-                .roles("USER");
+        auth.jdbcAuthentication().dataSource(dataSource);
     }
 
     @Override
@@ -60,23 +55,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(authenticationFilter())
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(),userDetailsManager(),secret))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsManager(), secret))
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-        .and().headers().frameOptions().disable()
+                .and().headers().frameOptions().disable()
 
-    ;
+        ;
     }
 
-    public JsonObjectAuthenticationFilter authenticationFilter() throws Exception{
+    public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {
         JsonObjectAuthenticationFilter authenticationFilter = new JsonObjectAuthenticationFilter(objectMapper);
         authenticationFilter.setAuthenticationSuccessHandler(successHandler);
         authenticationFilter.setAuthenticationFailureHandler(failureHandler);
         authenticationFilter.setAuthenticationManager(super.authenticationManager());
         return authenticationFilter;
     }
+
     @Bean
-    public UserDetailsManager userDetailsManager(){
+    public UserDetailsManager userDetailsManager() {
         return new JdbcUserDetailsManager(dataSource);
     }
 
