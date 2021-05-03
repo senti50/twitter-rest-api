@@ -1,7 +1,5 @@
 package pl.senti.twitterrestapi.model;
 
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
