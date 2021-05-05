@@ -2,6 +2,8 @@ package pl.senti.twitterrestapi.controller;
 
 
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.senti.twitterrestapi.dto.PostDto;
 import pl.senti.twitterrestapi.dto.PostDtoMapper;
@@ -53,8 +55,9 @@ public class PostController {
     }
 
     @DeleteMapping("/posts/{id}")
-    public void deletePost(@PathVariable long id){
+    public ResponseEntity<Void> deletePost(@PathVariable long id){
        postService.deletePost(id);
+       return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
